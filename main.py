@@ -17,24 +17,27 @@ cursor = connection.cursor()
 for element in ad_list:
     print("----------------")
     try:
-        #cursor.execute("""INSERT INTO products VALUES ()""")
-        print(element.find_element(by=By.CLASS_NAME, value="aditem").get_attribute(name="data-adid"))
+
+        id = element.find_element(by=By.CLASS_NAME, value="aditem").get_attribute(name="data-adid")
         price_full = element.find_element(by=By.CLASS_NAME, value="aditem-main--middle--price-shipping--price").text
         price = price_full.split()[0]
         print("Price: " + price)
         if price_full[-2:] == "VB":
             print("Ist VB!")
-        print(
-            "Title: " + element.find_element(by=By.CLASS_NAME, value="ellipsis").text)
+
+        title = element.find_element(by=By.CLASS_NAME, value="ellipsis").text
         print(
             "Description: " + element.find_element(by=By.CLASS_NAME, value="aditem-main--middle--description").text)
-        print("Location: " + element.find_element(by=By.CLASS_NAME, value="aditem-main--top--left").text)
+        location = element.find_element(by=By.CLASS_NAME, value="aditem-main--top--left").text
         try:
             element.find_element(by=By.CLASS_NAME, value="aditem-main--middle--price-shipping--shipping")
             shipping = True
         except NoSuchElementException:
             shipping = False
         print("Shipping: " + str(shipping))
+
+        cursor.execute("""INSERT INTO products VALUES (id, title, price, null, location, product_shipping=shipping, null)""")
+
     except NoSuchElementException:
         print("Abtrenner")  # Element is just a gray seperator
 
