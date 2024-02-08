@@ -6,7 +6,7 @@
       <synchronize>true</synchronize>
       <remarks>read da fucking name</remarks>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\zur-MuehlenE\PycharmProjects\KA-Scraper\scraper_objects_data</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\Users\GuittonT\PycharmProjects\KA-Scraper\scraper_objects_data</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
