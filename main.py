@@ -36,7 +36,8 @@ for element in ad_list:
             shipping = False
         print("Shipping: " + str(shipping))
 
-        cursor.execute("""INSERT INTO products VALUES (id, title, price, null, location, product_shipping=shipping, null)""")
+        cursor.execute("INSERT INTO products VALUES (?, ?, ?, ?, ?, ?, ?)", (id, title, price, None, location, shipping, None))
+        connection.commit()
 
     except NoSuchElementException:
         print("Abtrenner")  # Element is just a gray seperator
