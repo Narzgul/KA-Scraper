@@ -27,9 +27,13 @@ for element in ad_list:
         price_full = element.find_element(by=By.CLASS_NAME, value="aditem-main--middle--price-shipping--price").text
         price = price_full.split()[0]
         price = price.replace(".", "")
-        print("Price: " + price)
+        if price_full == "VB":
+            price = -1
+        print("Price: " + str(price))
+        vb = False
         if price_full[-2:] == "VB":
             print("Ist VB!")
+            vb = True
 
         title = element.find_element(by=By.CLASS_NAME, value="ellipsis").text
         print(
@@ -42,7 +46,7 @@ for element in ad_list:
             shipping = False
         print("Shipping: " + str(shipping))
 
-        cursor.execute("INSERT INTO products VALUES (?, ?, ?, ?, ?, ?, ?)", (product_id, title, price, None, location, shipping, None))
+        cursor.execute("INSERT INTO products VALUES (?, ?, ?, ?, ?, ?, ?)", (product_id, title, price, vb, location, shipping, None))
         connection.commit()
 
     except NoSuchElementException:
