@@ -16,4 +16,4 @@ async def root():
 
 @api.get("/products")
 async def get_products():
-    return cursor.execute("SELECT * FROM products").fetchall()
+    return cursor.execute("SELECT * FROM products ORDER BY CAST(product_id AS INTEGER)").fetchall()

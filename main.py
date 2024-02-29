@@ -1,55 +1,23 @@
-from selenium import webdriver
-from selenium.common import NoSuchElementException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.options import Options
-import sqlite3
+import datetime
+import os
+import threading
+import time
 
-options = Options()
-options.add_argument('-headless')
 
-driver = webdriver.Firefox(options=options)
-driver.install_addon("uBlock0_1.55.0.firefox.signed.xpi")
-driver.get("https://www.kleinanzeigen.de/s-rtx-4060/k0")
-ad_list = driver.find_elements(by=By.XPATH, value="/html/body/div[1]/div[2]/div/div[4]/div[2]/div[4]/div[1]/ul/li")
+def start_api():
+    os.system("uvicorn api:api --reload")
 
-connection = sqlite3.connect("scraper_objects_data")
-connection.row_factory = sqlite3.Row
-cursor = connection.cursor()
-for element in ad_list:
-    print("----------------")
-    try:
-        product_id = element.find_element(by=By.CLASS_NAME, value="aditem").get_attribute(name="data-adid")
 
-        if cursor.execute("SELECT * FROM products WHERE product_id=?", (product_id,)).fetchall():
-            print("Already scraped")
-            continue
+x = threading.Thread(target=start_api)
+print("Started API")
 
-        price_full = element.find_element(by=By.CLASS_NAME, value="aditem-main--middle--price-shipping--price").text
-        price = price_full.split()[0]
-        price = price.replace(".", "")
-        if price_full == "VB":
-            price = -1
-        print("Price: " + str(price))
-        vb = False
-        if price_full[-2:] == "VB":
-            print("Ist VB!")
-            vb = True
 
-        title = element.find_element(by=By.CLASS_NAME, value="ellipsis").text
-        print(
-            "Description: " + element.find_element(by=By.CLASS_NAME, value="aditem-main--middle--description").text)
-        location = element.find_element(by=By.CLASS_NAME, value="aditem-main--top--left").text
-        try:
-            element.find_element(by=By.CLASS_NAME, value="aditem-main--middle--price-shipping--shipping")
-            shipping = True
-        except NoSuchElementException:
-            shipping = False
-        print("Shipping: " + str(shipping))
+def run_scraper():
+    print("Running scraper at " + str(datetime.datetime.now()))
+    os.system("scraper.py")
 
-        cursor.execute("INSERT INTO products VALUES (?, ?, ?, ?, ?, ?, ?)", (product_id, title, price, vb, location, shipping, None))
-        connection.commit()
 
-    except NoSuchElementException:
-        print("Abtrenner")  # Element is just a gray seperator
-
-driver.quit()
+# Run the scheduled tasks indefinitely
+while True:
+    run_scraper()
+    time.sleep(600)
