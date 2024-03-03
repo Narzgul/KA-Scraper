@@ -25,15 +25,20 @@ for element in ad_list:
             continue
 
         price_full = element.find_element(by=By.CLASS_NAME, value="aditem-main--middle--price-shipping--price").text
-        price = price_full.split()[0]
-        price = price.replace(".", "")
-        if price_full == "VB":
+        if price_full != "" and price_full != "VB":
+            price = price_full.split()[0]
+            price = price.replace(".", "")
+            print("Price: " + str(price))
+            vb = False
+            if price_full[-2:] == "VB":
+                print("Ist VB!")
+                vb = True
+        else:
+            if price_full == "VB":
+                vb = True
+            else:
+                vb = False
             price = -1
-        print("Price: " + str(price))
-        vb = False
-        if price_full[-2:] == "VB":
-            print("Ist VB!")
-            vb = True
 
         title = element.find_element(by=By.CLASS_NAME, value="ellipsis").text
         print("Title: " + str(title))
