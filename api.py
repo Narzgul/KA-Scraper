@@ -16,4 +16,14 @@ async def root():
 
 @api.get("/products")
 async def get_products():
-    return cursor.execute("SELECT * FROM products ORDER BY CAST(product_id AS INTEGER)").fetchall()
+    products = []
+    with open("products.txt") as products_file:
+        for line in products_file:
+            products.append(line.split(',')[1].strip())
+
+    return products
+
+
+@api.get("/products/{name}")
+async def get_ads_by_name(name):
+    return cursor.execute("SELECT * FROM products WHERE category == '" + name + "' ORDER BY CAST(product_id AS INTEGER)").fetchall()

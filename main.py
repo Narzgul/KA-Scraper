@@ -5,10 +5,12 @@ import time
 
 
 def start_api():
+    os.system('echo "test"')
     os.system("uvicorn api:api --reload")
 
 
 x = threading.Thread(target=start_api)
+x.start()
 print("Started API")
 
 
