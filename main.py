@@ -15,7 +15,7 @@ print("Started API")
 
 def run_scraper():
     print("Running scraper at " + str(datetime.datetime.now()))
-    #os.system("python3 scraper.py")
+    # os.system("python3 scraper.py")
     exec(open("scraper.py").read())
 
 
