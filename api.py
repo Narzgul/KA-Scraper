@@ -48,7 +48,7 @@ async def delete_product(name):
     with open("products.txt", "r+") as products_file:
         lines = products_file.readlines()
         products_file.seek(0)
-        # Write every line extept the one that contains name
+        # Write every line except the one that contains name
         for line in lines:
             if line.split(',')[1].strip() != name:
                 products_file.write(line)
